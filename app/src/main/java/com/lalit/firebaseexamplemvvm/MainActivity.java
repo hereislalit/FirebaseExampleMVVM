@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.firebase.FirebaseApp;
 import com.lalit.firebaseexamplemvvm.adapter.UserDataRecyclerAdapter;
@@ -42,25 +43,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnUpdateUser.setOnClickListener(this);
         btnDeleteUser.setOnClickListener(this);
         viewModel = ViewModelProviders.of(this).get(UserListViewModel.class);
-        UserDataRecyclerAdapter adapter = new UserDataRecyclerAdapter(viewModel.getUserList().getValue());
-        adapter.setOnItemClickListener(this);
-        userListView.setAdapter(adapter);
+        if (viewModel.getUserList().getValue() != null) {
+            populateListView(viewModel.getUserList().getValue());
+            progressBar.setVisibility(View.GONE);
+        }
         userListView.setLayoutManager(new LinearLayoutManager(this));
         addDataObserver();
         initEditText();
         FirebaseApp.initializeApp(this);
     }
 
+    public void populateListView(ArrayList<User> userList){
+        UserDataRecyclerAdapter adapter = new UserDataRecyclerAdapter(userList);
+        adapter.setOnItemClickListener(this);
+        userListView.setAdapter(adapter);
+    }
+
     public void addDataObserver() {
         viewModel.getMediatorLiveData().observe(this, new Observer() {
             @Override
             public void onChanged(@Nullable Object o) {
-                if(o instanceof ArrayList){
-                    UserDataRecyclerAdapter adapter = new UserDataRecyclerAdapter((ArrayList<User>)o);
-                    adapter.setOnItemClickListener(MainActivity.this);
-                    userListView.setAdapter(adapter);
+                if (o instanceof ArrayList) {
+                    populateListView((ArrayList<User>)o);
                 }
-                if (o!=null && o instanceof Boolean) {
+                if (o != null && o instanceof Boolean) {
+                    if (!((Boolean) o)) {
+                        Toast.makeText(MainActivity.this, R.string.err_msg, Toast.LENGTH_LONG).show();
+                    }
                     progressBar.setVisibility(View.GONE);
                 }
             }

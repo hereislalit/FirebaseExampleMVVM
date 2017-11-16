@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">FireBaseExampleMVVM</string>
+    <string name="err_msg">An error has occurred while performing the operation.</string>
 </resources>

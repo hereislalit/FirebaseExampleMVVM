@@ -67,6 +67,7 @@ public class SigninActivitiy extends AppCompatActivity implements View.OnClickLi
                     Log.d(LOG_TITLE, "onAuthStateChanged:signed_in:" + user.getUid());
                     Intent in = new Intent(SigninActivitiy.this, MainActivity.class);
                     startActivity(in);
+                    finish();
                 } else {
                     // User is signed out
                     Log.d(LOG_TITLE, "onAuthStateChanged:signed_out");
