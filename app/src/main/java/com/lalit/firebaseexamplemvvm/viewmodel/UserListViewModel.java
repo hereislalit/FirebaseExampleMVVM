@@ -72,7 +72,7 @@ public class UserListViewModel extends ViewModel implements ValueEventListener {
         }
     }
 
-    public void deleteUser(User user) {
+    public void deleteUser() {
         if (selectedUser != null) {
             dbReference.child(selectedUser.getId()).removeValue();
         }

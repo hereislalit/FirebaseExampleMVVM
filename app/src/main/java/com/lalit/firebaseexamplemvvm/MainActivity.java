@@ -53,13 +53,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FirebaseApp.initializeApp(this);
     }
 
-    public void populateListView(ArrayList<User> userList){
+    private void populateListView(ArrayList<User> userList){
         UserDataRecyclerAdapter adapter = new UserDataRecyclerAdapter(userList);
         adapter.setOnItemClickListener(this);
         userListView.setAdapter(adapter);
     }
 
-    public void addDataObserver() {
+    private void addDataObserver() {
         viewModel.getMediatorLiveData().observe(this, new Observer() {
             @Override
             public void onChanged(@Nullable Object o) {
@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btn_delete_user:
                 progressBar.setVisibility(View.VISIBLE);
-                viewModel.deleteUser(viewModel.getSelectedUser());
+                viewModel.deleteUser();
                 etUserName.setText("");
                 etUserEmail.setText("");
                 break;
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initEditText();
     }
 
-    public void initEditText() {
+    private void initEditText() {
         User selectedUser = viewModel.getSelectedUser();
         if (selectedUser != null) {
             etUserEmail.setText(selectedUser.getEmail());
