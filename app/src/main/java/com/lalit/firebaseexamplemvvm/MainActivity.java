@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FirebaseApp.initializeApp(this);
     }
 
-    private void populateListView(ArrayList<User> userList){
+    private void populateListView(ArrayList<User> userList) {
         UserDataRecyclerAdapter adapter = new UserDataRecyclerAdapter(userList);
         adapter.setOnItemClickListener(this);
         userListView.setAdapter(adapter);
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onChanged(@Nullable Object o) {
                 if (o instanceof ArrayList) {
-                    populateListView((ArrayList<User>)o);
+                    populateListView((ArrayList<User>) o);
                 }
                 if (o != null && o instanceof Boolean) {
                     if (!((Boolean) o)) {
@@ -82,19 +82,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btn_add_user:
                 progressBar.setVisibility(View.INVISIBLE);
                 if (!etUserName.getText().toString().isEmpty() && !etUserEmail.getText().toString().isEmpty()) {
-                    User user = new User(etUserName.getText().toString(), etUserEmail.getText().toString());
-                    viewModel.addUser(user);
+                    viewModel.addUser(etUserName.getText().toString(), etUserEmail.getText().toString());
                 }
                 break;
             case R.id.btn_update_user:
                 progressBar.setVisibility(View.VISIBLE);
-                viewModel.updateUser(etUserName.getText().toString(), etUserEmail.getText().toString());
+                if (!etUserName.getText().toString().isEmpty() && !etUserEmail.getText().toString().isEmpty()) {
+                    viewModel.updateUser(etUserName.getText().toString(), etUserEmail.getText().toString());
+                    etUserName.setText("");
+                    etUserEmail.setText("");
+                }
                 break;
             case R.id.btn_delete_user:
                 progressBar.setVisibility(View.VISIBLE);
-                viewModel.deleteUser();
-                etUserName.setText("");
-                etUserEmail.setText("");
+                if (!etUserName.getText().toString().isEmpty() && !etUserEmail.getText().toString().isEmpty()) {
+                    viewModel.deleteUser();
+                    etUserName.setText("");
+                    etUserEmail.setText("");
+                }
                 break;
         }
     }

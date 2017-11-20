@@ -34,8 +34,8 @@ public class UserListViewModel extends ViewModel implements ValueEventListener {
         dbReference = firebaseDatabase.getReference(path + "/user");
         dbReference.addValueEventListener(this);
         userList = new MutableLiveData<ArrayList<User>>();
-        status=new MutableLiveData<Boolean>();
-        mediatorLiveData=new MediatorLiveData();
+        status = new MutableLiveData<Boolean>();
+        mediatorLiveData = new MediatorLiveData();
         mediatorLiveData.addSource(userList, new Observer<ArrayList<User>>() {
             @Override
             public void onChanged(@Nullable ArrayList<User> users) {
@@ -50,14 +50,16 @@ public class UserListViewModel extends ViewModel implements ValueEventListener {
         });
     }
 
-    public MediatorLiveData getMediatorLiveData(){
+    public MediatorLiveData getMediatorLiveData() {
         return mediatorLiveData;
     }
 
-    public void addUser(User user) {
+    public void addUser(String userName, String userEmail) {
+        User user = new User(userName, userEmail);
         String id = dbReference.push().getKey();
         user.setId(id);
         dbReference.child(id).setValue(user);
+        selectedUser=user;
     }
 
     public void updateUser(String name, String email) {
